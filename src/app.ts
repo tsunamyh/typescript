@@ -1,10 +1,7 @@
 // Code goes here!
-
-class Department {
+abstract class Department {
   // private name: string;
-
-  constructor(private id: number, public name: string) {
-
+  constructor(protected id: number, public name: string) {
   }
   protected employees: string[] = [];
 
@@ -12,23 +9,25 @@ class Department {
     console.log(`Department (${this.id}): ${this.name}`);
   }
 
-  addEmployee(employee: string) {
-    this.employees.push(employee);
-  }
-
+  abstract addEmployee(employee: string):void
+  
   printEmployeeInformation() {
     console.log(this.employees.length);
     console.log(this.employees);
   }
+  
+  static createEmployee(name: string) {
+    return { name: name };
+  }
 }
 
-const accounting = new Department(23, 'Accounting');
+// const accounting = new Department(23, 'Accounting');
 
-accounting.addEmployee('Max');
-accounting.addEmployee('Manu');
+// accounting.addEmployee('Max');
+// accounting.addEmployee('Manu');
 
-accounting.describe();
-accounting.printEmployeeInformation();
+// accounting.describe();
+// accounting.printEmployeeInformation();
 
 class AccountingDepartment extends Department {
   private lastReport: string;
@@ -58,7 +57,9 @@ class AccountingDepartment extends Department {
     }
     this.employees.push(name);
   }
-
+  get getemployees(){
+    return this.employees
+  }
   addReport(text: string) {
     this.reports.push(text);
     this.lastReport = text;
@@ -69,15 +70,45 @@ class AccountingDepartment extends Department {
   }
 }
 
-const accountings = new AccountingDepartment(748);
+class ITDepartment extends Department {
+  // admins: string[];
+  constructor(id: number,public admins: string[]) {
+    super(id, 'IT');
+    // this.admins = admins;
+  }
+  addEmployee(name: string) {
+    if (name === 'Max') {
+      return;
+    }
+    this.employees.push(name);
+  }
+  get getemployees(){
+    return this.employees
+  }
+}
 
-accountings.addReport('Something went wrong...');
-console.log(accountings.mostRecentReport);
+const accountingDep = new AccountingDepartment(748);
+const itDep = new ITDepartment(193,["khar","gav","shoghal"])
 
-accountings.addReport('Something went wrong1...');
-console.log(accountings.mostRecentReport);
+accountingDep.addEmployee("Saraacc")
+accountingDep.addEmployee("Javadacc")
+accountingDep.addEmployee("Sinaacc")
 
-accountings.mostRecentReport = "Gameover!!"
-console.log(accountings.mostRecentReport);
+itDep.addEmployee("HojatIT")
+itDep.addEmployee("HosseinIT")
+itDep.addEmployee("AliIT")
 
-accountings.printReports();
+console.log("accountingDep:::",accountingDep.getemployees);
+console.log("itDep:::",itDep.getemployees);
+
+// accountingDep.addReport('Something went wrong...');
+// console.log(accountingDep.mostRecentReport);
+
+// accountingDep.addReport('Something went wrong1...');
+// console.log(accountingDep.mostRecentReport);
+
+// accountingDep.mostRecentReport = "Gameover!!"
+// console.log(accountingDep.mostRecentReport);
+
+// accountingDep.printReports();
+// console.log(Department.createEmployee("HojatFthi"));
